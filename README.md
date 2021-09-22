@@ -8,6 +8,13 @@ backend is flask
 
 had to finangle some stuff to make it work on elastic beanstalk
 
+run locally by calling 
+```
+export FLASK_APP = application
+flask run
+```
+I'm not tryna host this on AWS for perpetuity cuz it's expensive
+
 # YEP
 
 Learnings
