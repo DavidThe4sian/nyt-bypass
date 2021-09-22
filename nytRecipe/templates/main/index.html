@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>recipe time</title>
+</head>
+<body style="margin:30px">
+    <h1>we want recipes</h1>
+    <form id="form1">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Recipe URL</label>
+      <input type="text" class="form-control" id="exampleInputURL" placeholder="Enter URL">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <br/>
+  <div id="output">
+    <h3 id="name"></h3>
+    <h4 id="showIng"></h4>
+    <div id="ingredients"></div>
+    <h4 id="showIns"></h4>
+    <div id="instruct"></div>
+    <h3 id="error" style="display:none">Something went wrong. Check the URL?</h3>
+  </div>
+  <script>
+    const form  = document.getElementById('form1');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      url1 = form.elements['exampleInputURL'].value;
+      console.log(url1);
+      fetch("/", {
+        method: "POST",
+        body: JSON.stringify({a: 1, b: 'Textual content', url: url1})
+      }).then(res => {
+        if(res.ok) {
+          document.getElementById('error').style.display = 'none';
+          return res.json()
+        }
+        else {
+          document.getElementById('error').style.display = 'block';
+        }
+      })
+      .then(data => {
+        console.log(data)
+
+        // set name
+        name = data['name']
+        document.getElementById('name').innerHTML = name;
+
+        // set ingredients
+        ing = data['recipeIngredient']
+
+        html1 = '';
+        ing.forEach((x) => {
+          html1 += '<li>' + x + '</li>';
+        });
+        html1 = '<ul>' + html1 + '</ul>';
+
+        const ingr = document.getElementById('ingredients');
+        ingr.innerHTML = html1;
+
+        // set instructions
+        html2 = '';
+        instruct = data['recipeInstructions']
+        instruct.forEach((x) => {
+          html2 += '<li>' + x['text'] + '</li>';
+        });
+        html2 = '<ol>' + html2 + '</ol>';
+        document.getElementById('instruct').innerHTML = html2;
+        // temp.innerHTML = data['name'];
+
+        document.getElementById('showIng').innerHTML = "Ingredients";
+        document.getElementById('showIns').innerHTML = "Instructions";
+
+      });
+    });
+  </script>
+</body>

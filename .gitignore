@@ -1,0 +1,5 @@
+venv
+env
+virt
+__pycache__
+.elasticbeanstalk
